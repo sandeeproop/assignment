@@ -40,11 +40,27 @@ myApp.directive('checkprice', function() {
 					ctrl.$setValidity('costIsLess', false);
 					return false;
 				}
-
-
 				// it is invalid
 				return false;
 			};
+			var validate = function(viewValue) {
+				var comparisonModel = attrs.checkprice;
+				if(!comparisonModel || !viewValue){
+					// It's valid because we have nothing to compare against
+					ctrl.$setValidity('costIsLess', true);
+
+				}else {
+					// It's valid if model is lower than the model we're comparing against
+					ctrl.$setValidity('costIsLess', parseInt(viewValue, 10) > parseInt(comparisonModel, 10) );
+					return viewValue;
+				}
+			};
+
+			ctrl.$parsers.unshift(validate);
+
+			attrs.$observe('checkprice', function(comparisonModel){
+				return validate(ctrl.$viewValue);
+			});
 		}
 	};
 });

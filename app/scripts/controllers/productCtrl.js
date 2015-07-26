@@ -5,7 +5,14 @@ myApp.controller('productCtrl', function($scope,productDataService) {
      * Function to work as constructor
      */
     $scope.init = function() {
+        $scope.newProduct ={};
         $scope.getProductData();
+    };
+    /**
+     * Function to set the product id
+     */
+    $scope.editTab = function() {
+        $scope.newProduct.id = maxVal($scope.productData,"id");
     };
     /**
      * Function to get data on page load so it can be user by typeahead directive
@@ -42,5 +49,26 @@ myApp.controller('productCtrl', function($scope,productDataService) {
             $scope.getProductData();
         });
     };
+    $scope.createChart = function() {
 
+        $scope.barChartLabels = [];
+        var productPrice =[];
+        var productCost = [];
+        $.each($scope.productData, function(idx, item) {
+            $scope.barChartLabels.push(item.name);
+            productPrice.push(item.sellingPrice);
+            productCost.push(item.cost);
+        });
+        $scope.barChartData = [productPrice,productCost];
+        console.log("$scope.barChartData",$scope.barChartData)
+        console.log("$scope.barChartLabels",$scope.barChartLabels)
+    };
+    $scope.destroyDB = function() {
+        var promise =  productDataService.delete();
+        console.log("promise",promise)
+        promise.then(function(responce) {
+            console.log("deleted",responce)
+            //$scope.getProductData();
+        });
+    };
 });

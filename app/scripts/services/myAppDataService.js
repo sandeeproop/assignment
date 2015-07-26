@@ -105,6 +105,19 @@ myApp.factory('productDataService', [ '$q','$rootScope', function($q,$rootScope)
                 });
             });
             return deferred.promise;
+        },
+        delete: function() {
+            var deferred = $q.defer();
+            db.destroy(function (error) {
+                $rootScope.$apply(function () {
+                    if (error) {
+                        return console.log(error);
+                    } else {
+                        deferred.resolve("success")
+                    }
+                });
+            });
+            return deferred.promise;
         }
     };
 } ]);

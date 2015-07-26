@@ -10,6 +10,10 @@
 							   typeahead="p as p.name for p in productData | filter : {name:$viewValue}"
 							   class="form-control" placeholder="Type to search"/>
 					</div>
+					<div class="col-md-2 pull-right">
+						<input type="button" class="btn btn-danger" value="Delete DB" ng-click="destroyDB()"/>
+					</div>
+
 				</div>
 				<tabset>
 					<tab heading="Home" active="tab.active">
@@ -35,51 +39,59 @@
 							</div>
 							<div class="form-group">
 								<label>Selling Price</label>
-								<input type="text" name="productPrice" ng-model="selectedProduct.sellingPrice" class="form-control" checkprice="{{selectedProduct.cost}}">
-								<span ng-show="home.productPrice.$error.checkprice">Please enter numbers only </span>
-								<span ng-show="home.productPrice.$error.costIsLess">Selling price can not be lees then cost </span>
+								<input type="text" name="productPrice" ng-model="selectedProduct.sellingPrice" class="form-control"  checkprice="{{selectedProduct.cost}}">
+
+								<div class="text-danger bg-danger" ng-show="home.productPrice.$error.checkprice">Please enter numbers only </div>
+								<div class="text-danger bg-danger" ng-show="home.productPrice.$error.costIsLess">Selling price can not be lees then cost </div>
 							</div>
 							<div class="form-group">
 								<input type="submit" class="btn btn-default" value="Update" />
 							</div>
 						</form>
 					</tab>
-					<tab heading="Edit" >
-						<form ng-submit="addProductData(newProduct)" class="myForm">
+					<tab heading="Edit" select="editTab()">
+						<form name="editForm" ng-submit="addProductData(newProduct)" class="myForm">
 							<div class="form-group clearfix">
 								<div class="col-md-6">
 									<label>Product Id</label>
-									<input type="text" ng-model="newProduct.id" class="form-control">
+									<input type="text" ng-model="newProduct.id" class="form-control" readonly>
 								</div>
 								<div class="col-md-6">
-									<label>Quantity</label>
-									<input type="text" ng-model="newProduct.quantity" class="form-control">
+									<label>Quantity*</label>
+									<input type="text" name="newProductQuantity" ng-model="newProduct.quantity" class="form-control" required integer>
 								</div>
 							</div>
 							<div class="form-group">
-								<label>Product Name</label>
+								<label>Product Name*</label>
 								<div>
-									<input type="text" ng-model="newProduct.name" class="form-control">
+									<input type="text" name="newProductName" ng-model="newProduct.name" class="form-control" checkname>
+									<span ng-show="editForm.newProductName.$error.checkname">Please enter Alpha numeric characters only </span>
 								</div>
 							</div>
 							<div class="form-group">
-								<label>Product Price</label>
+								<label>Product Price*</label>
 								<div>
-									<input type="text" ng-model="newProduct.cost" class="form-control">
+									<input type="text" name="newProductCost" ng-model="newProduct.cost" class="form-control" required integer>
+
 								</div>
 							</div>
 							<div class="form-group">
-								<label>Selling Price</label>
+								<label>Selling Price*</label>
 								<div>
-									<input type="text" ng-model="newProduct.sellingPrice" class="form-control">
+									<input type="text" name="sellingPrice" ng-model="newProduct.sellingPrice" class="form-control" checkprice="{{newProduct.cost}}">
+									<div class="text-danger bg-danger" ng-show="editForm.sellingPrice.$error.checkprice">Please enter numbers only </div>
+									<div class="text-danger bg-danger" ng-show="editForm.sellingPrice.$error.costIsLess">Selling price can not be lees then cost </div>
 								</div>
 							</div>
 							<div class="form-group">
-								<input type="submit" class="btn btn-default" value="Save" />
+								<input type="submit" class="btn btn-default" value="Save" ng-disabled="editForm.$invalid"/>
 							</div>
 						</form>
 					</tab>
-
+					<tab heading="Chart" select="createChart()">
+						<canvas id="bar" ng-if="barChartData" class="chart chart-bar" data="barChartData"
+								labels="barChartLabels" width="818" height="409"></canvas>
+					</tab>
 				</tabset>
 			</div>
 		</div>
