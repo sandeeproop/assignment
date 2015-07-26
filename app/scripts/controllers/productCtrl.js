@@ -6,7 +6,15 @@ myApp.controller('productCtrl', function($scope,productDataService) {
      */
     $scope.init = function() {
         $scope.newProduct ={};
+        $scope.alerts =[];
         $scope.getProductData();
+    };
+    /**
+     * Function to close alert
+     * @param index
+     */
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
     };
     /**
      * Function to set the product id
@@ -24,6 +32,15 @@ myApp.controller('productCtrl', function($scope,productDataService) {
         promise.then(function(data){
             console.log("got data",data)
             $scope.productData = data;
+        },function(returnedObj){
+            /**
+             * This is the case when db is failed to load at first time.
+             */
+            if(returnedObj.data == "error"){
+                console.log(returnedObj.title);
+                $scope.getProductData();
+            }
+
         })
     };
     /**
@@ -33,6 +50,7 @@ myApp.controller('productCtrl', function($scope,productDataService) {
     $scope.updateProductData = function(obj) {
         var promise =  productDataService.update(obj);
         promise.then(function(responce) {
+           $scope.alerts.push({type:"success",msg: 'Product info Updated successfully'});
            console.log("updated",responce)
         });
         //productDataService.update(obj);
@@ -45,10 +63,14 @@ myApp.controller('productCtrl', function($scope,productDataService) {
         var promise =  productDataService.add(obj);
         console.log("promise",promise)
         promise.then(function(responce) {
-            console.log("added",responce)
+            console.log("added",responce);
+            $scope.alerts.push({type:"success",msg: 'Product info added successfully'});
             $scope.getProductData();
         });
     };
+    /**
+     * FUnction to create chart
+     */
     $scope.createChart = function() {
 
         $scope.barChartLabels = [];
@@ -60,15 +82,13 @@ myApp.controller('productCtrl', function($scope,productDataService) {
             productCost.push(item.cost);
         });
         $scope.barChartData = [productPrice,productCost];
-        console.log("$scope.barChartData",$scope.barChartData)
-        console.log("$scope.barChartLabels",$scope.barChartLabels)
     };
     $scope.destroyDB = function() {
         var promise =  productDataService.delete();
         console.log("promise",promise)
         promise.then(function(responce) {
-            console.log("deleted",responce)
-            //$scope.getProductData();
+            console.log("deleted",responce);
+            $scope.alerts.push({type:"success",msg: 'DB destroyed successfully'});
         });
     };
 });

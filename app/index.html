@@ -12,6 +12,10 @@
 
     <script src="scripts/vendor/jquery-1.9.1.js" type="text/javascript"></script>
     <script src="scripts/vendor/pouchdb-3.6.0.min.js"></script>
+    <!--Following script tag is added to handle console.log error in case of older versions of IE browsers-->
+    <script type="application/javascript">
+      if (!window.console) console = {log: function() {}};
+    </script>
   </head>
   <body  ng-app="myApp">
   <nav class="navbar navbar-inverse">

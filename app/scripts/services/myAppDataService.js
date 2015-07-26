@@ -52,6 +52,10 @@ myApp.factory('productDataService', [ '$q','$rootScope', function($q,$rootScope)
                             }
                             // handle response
                         });
+                        deferred.reject({
+                            title : "DB not created",
+                            data : "error"
+                        })
                         return console.log(err);
                     }
                     console.log("doc", doc.product)
