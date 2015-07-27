@@ -59,21 +59,22 @@
 								</div>
 								<div class="col-md-6">
 									<label>Quantity*</label>
-									<input type="text" name="newProductQuantity" ng-model="newProduct.quantity" class="form-control" required integer>
+									<input type="number" name="newProductQuantity" ng-model="newProduct.quantity" class="form-control" required />
+									<div class="text-danger bg-danger" ng-show="editForm.newProductQuantity.$error.number">Please enter numbers only </div>
 								</div>
 							</div>
 							<div class="form-group">
 								<label>Product Name*</label>
 								<div>
 									<input type="text" name="newProductName" ng-model="newProduct.name" class="form-control" checkname>
-									<span ng-show="editForm.newProductName.$error.checkname">Please enter Alpha numeric characters only </span>
+									<span class="text-danger bg-danger" ng-show="editForm.newProductName.$error.checkname">Please enter Alpha numeric characters only </span>
 								</div>
 							</div>
 							<div class="form-group">
 								<label>Product Price*</label>
 								<div>
-									<input type="text" name="newProductCost" ng-model="newProduct.cost" class="form-control" required integer>
-
+									<input type="number" name="newProductCost" ng-model="newProduct.cost" class="form-control" required/>
+									<div class="text-danger bg-danger" ng-show="editForm.newProductCost.$error.number">Please enter numbers only </div>
 								</div>
 							</div>
 							<div class="form-group">
